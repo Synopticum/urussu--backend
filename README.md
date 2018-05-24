@@ -1,1 +1,2 @@
-# urussu--backend
+- `mongod --dbpath ~/Desktop/projects/urussu/db/`
+- `npm start -- --port 3000`
