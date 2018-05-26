@@ -55,7 +55,7 @@ class News {
             }
         }
 
-        this._data = _data;
+        this._data = shuffle(_data);
     }
 
     isCacheAvailable() {
