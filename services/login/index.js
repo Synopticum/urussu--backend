@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 module.exports = async function (fastify, opts) {
   fastify
     .register(registerRoutes);
-}
+};
 
 async function registerRoutes(fastify, opts) {
   fastify.route({

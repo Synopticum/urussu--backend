@@ -8,10 +8,11 @@
     "fastify-static": "^0.11.0",
     "mongoose": "^5.1.0",
     "node-fetch": "^2.1.2",
-    "serve-static": "^1.13.2"
+    "serve-static": "^1.13.2",
+    "vk-io": "^4.0.0-beta.8"
   },
   "scripts": {
     "microservice": "fastify",
-    "start": "fastify start index.js"
+    "start": "node index.js"
   }
 }
