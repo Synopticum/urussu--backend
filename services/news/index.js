@@ -1,3 +1,5 @@
+const shuffle = require('shuffle-array');
+
 const { VK } = require('vk-io');
 const vk = new VK();
 const { VK_SERVICE_KEY } = require('../../config');
@@ -7,23 +9,6 @@ module.exports = async function (fastify, opts) {
     fastify
         .register(registerRoutes);
 };
-
-class News {
-    constructor() {
-        this.data = null;
-        this.lastUpdatedAt = null;
-    }
-
-    isCacheAvailable() {
-        return this.data && this.lastUpdatedAt;
-    }
-
-    isCacheValid() {
-        return !this.lastUpdatedAt || Date.now() - this.lastUpdatedAt < 3600000;
-    }
-}
-
-let news = new News();
 
 async function registerRoutes(fastify, opts) {
     fastify.route({
@@ -39,6 +24,50 @@ async function registerRoutes(fastify, opts) {
         }
     });
 }
+
+class News {
+    constructor() {
+        this._data = null;
+        this.lastUpdatedAt = null;
+    }
+
+    get data() {
+        return this._data;
+    }
+
+    set data(rawData) {
+        let _data = [];
+
+        // go through all the data sources
+        for (let dataSource of Object.keys(rawData)) {
+            if (rawData[dataSource].items) {
+                for (let item of rawData[dataSource].items) {
+                    // ignore if there is no text
+                    if (item.text) {
+                        _data.push({
+                            text: item.text,
+                            date: item.date,
+                            attachments: item.attachments,
+                            link: `https://vk.com/wall${item.owner_id}_${item.id}`
+                        });
+                    }
+                }
+            }
+        }
+
+        this._data = _data;
+    }
+
+    isCacheAvailable() {
+        return this.data && this.lastUpdatedAt;
+    }
+
+    isCacheValid() {
+        return !this.lastUpdatedAt || Date.now() - this.lastUpdatedAt < 3600000;
+    }
+}
+
+let news = new News();
 
 async function getNews() {
     const yutazinka = await _getYutazinka();
