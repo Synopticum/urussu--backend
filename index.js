@@ -1,6 +1,14 @@
 'use strict';
+const fs = require('fs');
+const path = require('path');
 
-const fastify = require('fastify')();
+const fastify = require('fastify')({
+    // http2: true,
+    // https: {
+    //     key: fs.readFileSync(path.join(__dirname, '.', 'config', 'certs', 'localhost.key')),
+    //     cert: fs.readFileSync(path.join(__dirname, '.', 'config', 'certs', 'localhost.cert'))
+    // }
+});
 const db  = require('./db');
 
 fastify
