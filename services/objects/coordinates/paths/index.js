@@ -1,9 +1,9 @@
-const ObjectModel = require('../../../db/object.model');
+const ObjectModel = require('../../../../db/object.model');
 
 module.exports = async function (fastify, opts) {
   fastify
     .register(registerRoutes);
-}
+};
 
 async function registerRoutes(fastify, opts) {
   fastify.route({

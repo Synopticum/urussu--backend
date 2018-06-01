@@ -1,4 +1,4 @@
-const ObjectModel = require('../../../db/object.model');
+const ObjectModel = require('../../../../db/object.model');
 
 module.exports = async function (fastify, opts) {
   fastify
