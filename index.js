@@ -15,8 +15,8 @@ const prefix = '/api';
 fastify
     .use(require('cors')())
     .register(require('fastify-auth'))
-    .decorate('verifyVkAuth', require('./services/login/verifyVkAuth'))
-    .register(require('./services/login'), { prefix })
+    .decorate('verifyVkAuth', require('./services/authenticate/verifyVkAuth'))
+    .register(require('./services/authenticate'), { prefix })
     .register(require('./services/objects'), { prefix })
     .register(require('./services/objects/object'), { prefix })
     .register(require('./services/objects/coordinates/paths'), { prefix })
