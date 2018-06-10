@@ -23,14 +23,15 @@ async function registerRoutes(fastify, opts) {
                     let token = uuidv4();
                     let { vkId, firstName, lastName } = await getUserInfo(accessToken);
                     let user = await UserModel.findOne({ vkId });
-                    let updatedUser;
 
                     if (user) {
-                        updatedUser = await UserModel.findOneAndUpdate({ vkId }, { $set: { tokenExpiresIn, token }});
+                        user.token = token;
+                        user.tokenExpiresIn = tokenExpiresIn;
+                        user = await user.save();
                     }
 
                     if (!user && vkId && firstName && lastName) {
-                        updatedUser = await UserModel.create({
+                        user = await UserModel.create({
                             _id: mongoose.Types.ObjectId(vkId),
                             vkId,
                             tokenExpiresIn,
@@ -47,10 +48,10 @@ async function registerRoutes(fastify, opts) {
 
                     reply.code(200);
                     return {
-                        vkId: updatedUser.vkId,
-                        firstName: updatedUser.firstName,
-                        lastName: updatedUser.lastName,
-                        token: updatedUser.token
+                        vkId: user.vkId,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        token: user.token
                     };
                 }
 

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 let UserSchema = new Schema({
     _id: {type: Schema.ObjectId, required: true},
     vkId: {type: Number},
-    tokenExpiresIn: {type: Date},
+    tokenExpiresIn: {type: Number},
     firstName: {type: String},
     lastName: {type: String},
     token: {type: String}
