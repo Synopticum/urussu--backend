@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const mongoose = require('mongoose');
 const UserModel = require('../../db/user.model');
 const uuidv4 = require('uuid/v4');
+const { VK_CLIENT_ID, VK_CLIENT_SECRET, VK_API_VERSION } = require('../../config');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -67,14 +68,14 @@ async function registerRoutes(fastify, opts) {
 }
 
 async function getAccessToken(code, origin) {
-    let response = await fetch(`https://oauth.vk.com/access_token?client_id=4447151&client_secret=bk2AL0XGFoyUjWmFWBcX&redirect_uri=${origin}&code=${code}`);
+    let response = await fetch(`https://oauth.vk.com/access_token?client_id=${VK_CLIENT_ID}&client_secret=${VK_CLIENT_SECRET}&redirect_uri=${origin}&code=${code}`);
     let json = await response.json();
 
     return !json.error ? { accessToken: json.access_token, expiresIn: json.expires_in } : {};
 }
 
 async function getUserInfo(accessToken) {
-    let response = await fetch(`https://api.vk.com/method/users.get?access_token=${accessToken}&v=5.78`);
+    let response = await fetch(`https://api.vk.com/method/users.get?access_token=${accessToken}&v=${VK_API_VERSION}`);
     let json = await response.json();
 
     if (!json.error) {
