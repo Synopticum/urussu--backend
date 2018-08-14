@@ -13,10 +13,11 @@ async function registerRoutes(fastify, opts) {
         method: 'GET',
         url: '/authenticate',
         handler: async function verifyVkAuth(request, reply) {
+            let origin = request.headers.origin;
             let code = request.query.code;
 
             if (code) {
-                let { accessToken, expiresIn } = await getAccessToken(code);
+                let { accessToken, expiresIn } = await getAccessToken(code, origin);
 
                 if (accessToken) {
                     let tokenExpiresIn = Date.now() + expiresIn*1000;
@@ -65,8 +66,8 @@ async function registerRoutes(fastify, opts) {
     });
 }
 
-async function getAccessToken(code) {
-    let response = await fetch(`https://oauth.vk.com/access_token?client_id=4447151&client_secret=bk2AL0XGFoyUjWmFWBcX&redirect_uri=http://localhost:8081&code=${code}`);
+async function getAccessToken(code, origin) {
+    let response = await fetch(`https://oauth.vk.com/access_token?client_id=4447151&client_secret=bk2AL0XGFoyUjWmFWBcX&redirect_uri=${origin}&code=${code}`);
     let json = await response.json();
 
     return !json.error ? { accessToken: json.access_token, expiresIn: json.expires_in } : {};
