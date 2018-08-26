@@ -23,7 +23,7 @@ fastify
     .register(require('./services/objects/coordinates/paths'), { prefix })
     .register(require('./services/objects/coordinates/circles'), { prefix })
     .register(require('./services/news'), { prefix })
-    .listen(12345, 'localhost', function (err) {
+    .listen(12345, '0.0.0.0', function (err) {
         if (err) throw err;
         console.log(`server listening on ${fastify.server.address().port}`)
     });
