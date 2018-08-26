@@ -1,4 +1,12 @@
 module.exports = {
+    get PORT() {
+        return getValueFor('port');
+    },
+
+    get URI() {
+        return getValueFor('uri');
+    },
+
     get VK_SERVICE_KEY() {
         return getValueFor('serviceKey');
     },

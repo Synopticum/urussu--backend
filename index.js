@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { PORT, URI } = require('./config');
 
 const fastify = require('fastify')({
     // http2: true,
@@ -23,7 +24,7 @@ fastify
     .register(require('./services/objects/coordinates/paths'), { prefix })
     .register(require('./services/objects/coordinates/circles'), { prefix })
     .register(require('./services/news'), { prefix })
-    .listen(12345, '0.0.0.0', function (err) {
+    .listen(PORT, URI, function (err) {
         if (err) throw err;
         console.log(`server listening on ${fastify.server.address().port}`)
     });
