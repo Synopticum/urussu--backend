@@ -24,6 +24,7 @@ fastify
     .register(require('./services/objects/coordinates/paths'), { prefix })
     .register(require('./services/objects/coordinates/circles'), { prefix })
     .register(require('./services/news'), { prefix })
+    .register(require('./services/news/weather'), { prefix })
     .listen(PORT, URI, function (err) {
         if (err) throw err;
         console.log(`server listening on ${fastify.server.address().port}`)

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "dependencies": {
     "cors": "^2.8.4",
+    "crawler": "^1.2.0",
     "fastify": "^1.4.0",
     "fastify-auth": "^0.2.0",
     "fastify-static": "^0.11.0",
