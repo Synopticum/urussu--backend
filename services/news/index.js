@@ -14,7 +14,7 @@ async function registerRoutes(fastify, opts) {
         url: '/news',
         handler: async function () {
             if (!news.isCacheAvailable() || !news.isCacheValid()) {
-                news.data = await getNews();
+                news.data = await News.fetch();
                 news.lastUpdatedAt = Date.now();
             }
 
@@ -63,40 +63,28 @@ class News {
     isCacheValid() {
         return !this.lastUpdatedAt || Date.now() - this.lastUpdatedAt < 3600000;
     }
+
+    static async fetch() {
+        const yutazinka = await News._getFromVk('yutazinka');
+        const ktv = await News._getFromVk('ktv');
+        const dk = await News._getFromVk('dk');
+        const mestoVstrechi = await News._getFromVk('mestoVstrechi');
+
+        return { yutazinka, ktv, dk, mestoVstrechi }
+    }
+
+    static async _getFromVk(dataSource) {
+        switch (dataSource) {
+            case 'yutazinka':
+                return await vk.api.wall.get({ owner_id: -33411279 });
+            case 'ktv':
+                return await vk.api.wall.get({ owner_id: -53412022 });
+            case 'dk':
+                return await vk.api.wall.get({ owner_id: -138073975 });
+            case 'mestoVstrechi':
+                return await vk.api.wall.get({ owner_id: -121438510 });
+        }
+    }
 }
 
 let news = new News();
-
-async function getNews() {
-    const yutazinka = await _getYutazinka();
-    const ktv = await _getKtv();
-    const dk = await _getDk();
-    const mestoVstrechi = await _getMestoVstrechi();
-
-    return { yutazinka, ktv, dk, mestoVstrechi }
-}
-
-// data sources
-async function _getYutazinka() {
-    return await vk.api.wall.get({
-        owner_id: -33411279
-    });
-}
-
-async function _getKtv() {
-    return await vk.api.wall.get({
-        owner_id: -53412022
-    });
-}
-
-async function _getDk() {
-    return await vk.api.wall.get({
-        owner_id: -138073975
-    });
-}
-
-async function _getMestoVstrechi() {
-    return await vk.api.wall.get({
-        owner_id: -121438510
-    });
-}
