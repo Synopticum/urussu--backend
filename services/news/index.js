@@ -1,5 +1,3 @@
-const shuffle = require('shuffle-array');
-
 const { VK } = require('vk-io');
 const vk = new VK();
 const { VK_SERVICE_KEY } = require('../../config');
@@ -55,7 +53,7 @@ class News {
             }
         }
 
-        this._data = shuffle(_data);
+        this._data = _data;
     }
 
     isCacheAvailable() {
