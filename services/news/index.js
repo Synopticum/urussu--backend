@@ -43,7 +43,8 @@ class News {
                     // ignore if there is no text
                     if (item.text) {
                         _data.push({
-                            text: item.text,
+                            dataSource,
+                            text: News.cleanUpText(item.text),
                             date: item.date,
                             attachments: item.attachments,
                             link: `https://vk.com/wall${item.owner_id}_${item.id}`
@@ -83,6 +84,27 @@ class News {
                 return await vk.api.wall.get({ owner_id: -138073975 });
             case 'mestoVstrechi':
                 return await vk.api.wall.get({ owner_id: -121438510 });
+        }
+    }
+
+    static cleanUpText(text) {
+        let cleanedText = News._removeUrisFromText(text);
+        return News._removeEmojisFromText(cleanedText);
+    }
+
+    static _removeUrisFromText(text) {
+        try {
+            return text.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+        } catch (e) {
+            return text;
+        }
+    }
+
+    static _removeEmojisFromText(text) {
+        try {
+            return text.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '');
+        } catch (e) {
+            return text;
         }
     }
 }
