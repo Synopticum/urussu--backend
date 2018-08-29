@@ -39,16 +39,19 @@ class News {
         // go through all the data sources
         for (let dataSource of Object.keys(rawData)) {
             if (rawData[dataSource].items) {
-                for (let item of rawData[dataSource].items) {
+                for (let rawItem of rawData[dataSource].items) {
                     // ignore if there is no text
-                    if (item.text) {
-                        _data.push({
+                    if (rawItem.text) {
+                        let item = {
                             dataSource,
-                            text: News.cleanUpText(item.text),
-                            date: item.date,
-                            attachments: item.attachments,
-                            link: `https://vk.com/wall${item.owner_id}_${item.id}`
-                        });
+                            text: News.cleanUpText(rawItem.text),
+                            date: rawItem.date,
+                            attachments: rawItem.attachments,
+                            link: `https://vk.com/wall${rawItem.owner_id}_${rawItem.id}`,
+                            isTatar: News.isTatar(rawItem.text)
+                        };
+
+                        _data.push(item);
                     }
                 }
             }
@@ -71,7 +74,7 @@ class News {
         const dk = await News._getFromVk('dk');
         const mestoVstrechi = await News._getFromVk('mestoVstrechi');
 
-        return { yutazinka, ktv, dk, mestoVstrechi }
+        return { yutazinka, ktv, dk, mestoVstrechi };
     }
 
     static async _getFromVk(dataSource) {
@@ -106,6 +109,14 @@ class News {
         } catch (e) {
             return text;
         }
+    }
+
+    static isTatar(text) {
+        return text.includes('ә') || text.includes('ә'.toUpperCase()) ||
+               text.includes('ө') || text.includes('ө'.toUpperCase()) ||
+               text.includes('ү') || text.includes('ү'.toUpperCase()) ||
+               text.includes('җ') || text.includes('җ'.toUpperCase()) ||
+               text.includes('ң') || text.includes('ң'.toUpperCase());
     }
 }
 
