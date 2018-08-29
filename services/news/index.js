@@ -95,7 +95,8 @@ class News {
     }
 
     static cleanUpText(rawText) {
-        let cleanedText = News._removeUrisFromText(text);
+        let cleanedText = News._removeUrisFromText(rawText);
+        cleanedText = News._correctQuotes(cleanedText);
         return News._removeEmojisFromText(cleanedText);
     }
 
@@ -116,7 +117,7 @@ class News {
     }
 
     static _correctQuotes(rawText) {
-        let text = rawText.replace()
+        return rawText.replace(/"([^"]*)"/g, '«$1»');
     }
 
     static isTatar(rawText) {
