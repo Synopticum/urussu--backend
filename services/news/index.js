@@ -98,6 +98,7 @@ class News {
         let cleanedText = News._removeUrisFromText(rawText);
         cleanedText = News._correctQuotes(cleanedText);
         cleanedText = News._unwrapVkLinks(cleanedText);
+        cleanedText = cleanedText.trim();
         return News._removeEmojisFromText(cleanedText);
     }
 
