@@ -42,16 +42,20 @@ class News {
                 for (let rawItem of rawData[dataSource].items) {
                     // ignore if there is no text
                     if (rawItem.text) {
-                        let item = {
-                            dataSource,
-                            text: News.cleanUpText(rawItem.text),
-                            date: rawItem.date,
-                            attachments: rawItem.attachments,
-                            link: `https://vk.com/wall${rawItem.owner_id}_${rawItem.id}`,
-                            isTatar: News.isTatar(rawItem.text)
-                        };
+                        let text = News.cleanUpText(rawItem.text);
 
-                        _data.push(item);
+                        if (text) {
+                            let item = {
+                                dataSource,
+                                text,
+                                date: rawItem.date,
+                                attachments: rawItem.attachments,
+                                link: `https://vk.com/wall${rawItem.owner_id}_${rawItem.id}`,
+                                isTatar: News.isTatar(rawItem.text)
+                            };
+
+                            _data.push(item);
+                        }
                     }
                 }
             }
@@ -90,33 +94,37 @@ class News {
         }
     }
 
-    static cleanUpText(text) {
+    static cleanUpText(rawText) {
         let cleanedText = News._removeUrisFromText(text);
         return News._removeEmojisFromText(cleanedText);
     }
 
-    static _removeUrisFromText(text) {
+    static _removeUrisFromText(rawText) {
         try {
-            return text.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
+            return rawText.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
         } catch (e) {
-            return text;
+            return rawText;
         }
     }
 
-    static _removeEmojisFromText(text) {
+    static _removeEmojisFromText(rawText) {
         try {
-            return text.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '');
+            return rawText.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '');
         } catch (e) {
-            return text;
+            return rawText;
         }
     }
 
-    static isTatar(text) {
-        return text.includes('ә') || text.includes('ә'.toUpperCase()) ||
-               text.includes('ө') || text.includes('ө'.toUpperCase()) ||
-               text.includes('ү') || text.includes('ү'.toUpperCase()) ||
-               text.includes('җ') || text.includes('җ'.toUpperCase()) ||
-               text.includes('ң') || text.includes('ң'.toUpperCase());
+    static _correctQuotes(rawText) {
+        let text = rawText.replace()
+    }
+
+    static isTatar(rawText) {
+        return rawText.includes('ә') || rawText.includes('ә'.toUpperCase()) ||
+               rawText.includes('ө') || rawText.includes('ө'.toUpperCase()) ||
+               rawText.includes('ү') || rawText.includes('ү'.toUpperCase()) ||
+               rawText.includes('җ') || rawText.includes('җ'.toUpperCase()) ||
+               rawText.includes('ң') || rawText.includes('ң'.toUpperCase());
     }
 }
 
