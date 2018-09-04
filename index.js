@@ -4,11 +4,11 @@ const path = require('path');
 const { PORT, URI } = require('./config');
 
 const fastify = require('fastify')({
-    // http2: true,
-    // https: {
-    //     key: fs.readFileSync(path.join(__dirname, '.', 'config', 'certs', 'localhost.key')),
-    //     cert: fs.readFileSync(path.join(__dirname, '.', 'config', 'certs', 'localhost.cert'))
-    // }
+    http2: true,
+    https: {
+        key: fs.readFileSync(path.join('/', 'home', 'ec2-user', 'secret.key')),
+        cert: fs.readFileSync(path.join('/', 'home', 'ec2-user', 'joined.crt'))
+    }
 });
 const db  = require('./db');
 const prefix = '/api';
