@@ -34,10 +34,10 @@ function getValueFor(argument) {
     return '';
 }
 
-const checkMark = '\x1b[32m✔';
-const xMark = '\x1b[31m✘';
-
 if (!config.PORT || !config.URI || !config.VK_SERVICE_KEY || !config.VK_CLIENT_ID || !config.VK_CLIENT_SECRET || !config.VK_API_VERSION) {
+    const checkMark = '\x1b[32m✔';
+    const xMark = '\x1b[31m✘';
+
     throw new Error(`
         Some required params haven't been provided:
         
