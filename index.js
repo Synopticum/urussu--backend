@@ -1,15 +1,17 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { PORT, URI } = require('./config');
+const config = require('./config');
 
-const fastify = require('fastify')({
+const serverConfig = config.ENV === 'prod' ? {
     http2: true,
     https: {
         key: fs.readFileSync(path.join('/', 'home', 'ec2-user', 'secret.key')),
         cert: fs.readFileSync(path.join('/', 'home', 'ec2-user', 'joined.crt'))
     }
-});
+} : null;
+
+const fastify = require('fastify')(serverConfig);
 const db  = require('./db');
 const prefix = '/api';
 
@@ -25,7 +27,7 @@ fastify
     .register(require('./services/objects/coordinates/circles'), { prefix })
     .register(require('./services/news'), { prefix })
     .register(require('./services/news/weather'), { prefix })
-    .listen(PORT, URI, function (err) {
+    .listen(config.PORT, config.URI, function (err) {
         if (err) throw err;
         console.log(`server listening on ${fastify.server.address().port}`)
     });

@@ -1,2 +1,2 @@
 - `mongod --dbpath ~/Desktop/projects/urussu/db/`
-- `npm start -- --port 3000`
+- `npm start -- --env dev --uri localhost --port 3000 --apiVersion 5.78 --serviceKey ??? --clientId ??? --clientSecret ???`

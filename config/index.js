@@ -7,6 +7,10 @@ const config = {
         return getValueFor('uri');
     },
 
+    get ENV() {
+        return getValueFor('env');
+    },
+
     get VK_SERVICE_KEY() {
         return getValueFor('serviceKey');
     },
@@ -41,6 +45,7 @@ if (!config.PORT || !config.URI || !config.VK_SERVICE_KEY || !config.VK_CLIENT_I
     throw new Error(`
         Some required params haven't been provided:
         
+        \x1b[37m Environment:--------${config.ENV ? `${config.ENV} ${checkMark}` : xMark}
         \x1b[37m Port:---------------${config.PORT ? `${config.PORT} ${checkMark}` : xMark}
         \x1b[37m Server URI:---------${config.URI ? `${config.URI} ${checkMark}` : xMark}
         \x1b[37m VK Service Key:-----${config.VK_SERVICE_KEY ? `${config.VK_SERVICE_KEY} ${checkMark}` : xMark}
