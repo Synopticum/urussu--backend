@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
     get PORT() {
         return getValueFor('port');
     },
@@ -33,3 +33,21 @@ function getValueFor(argument) {
 
     return '';
 }
+
+const checkMark = '\x1b[32m✔';
+const xMark = '\x1b[31m✘';
+
+if (!config.PORT || !config.URI || !config.VK_SERVICE_KEY || !config.VK_CLIENT_ID || !config.VK_CLIENT_SECRET || !config.VK_API_VERSION) {
+    throw new Error(`
+        Some required params haven't been provided:
+        
+        \x1b[37m Port:---------------${config.PORT ? `${config.PORT} ${checkMark}` : xMark}
+        \x1b[37m Server URI:---------${config.URI ? `${config.URI} ${checkMark}` : xMark}
+        \x1b[37m VK Service Key:-----${config.VK_SERVICE_KEY ? `${config.VK_SERVICE_KEY} ${checkMark}` : xMark}
+        \x1b[37m VK Client ID:-------${config.VK_CLIENT_ID ? `${config.VK_CLIENT_ID} ${checkMark}` : xMark}
+        \x1b[37m VK Client Secret:---${config.VK_CLIENT_SECRET ? `${config.VK_CLIENT_SECRET} ${checkMark}` : xMark}
+        \x1b[37m VK API Version:-----${config.VK_API_VERSION ? `${config.VK_API_VERSION} ${checkMark}` : xMark}
+        \x1b[37m`);
+}
+
+module.exports = config;
