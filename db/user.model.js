@@ -7,7 +7,8 @@ let UserSchema = new Schema({
     tokenExpiresIn: {type: Number},
     firstName: {type: String},
     lastName: {type: String},
-    token: {type: String}
+    token: {type: String},
+    role: {type: String, default: 'member'}
 }, { uid: false });
 
 let UserModel = mongoose.model('User', UserSchema);

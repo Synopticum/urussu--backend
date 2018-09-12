@@ -39,7 +39,8 @@ async function registerRoutes(fastify, opts) {
                             tokenExpiresIn,
                             firstName,
                             lastName,
-                            token
+                            token,
+                            role: 'member'
                         });
                     }
 
