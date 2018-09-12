@@ -34,7 +34,7 @@ async function registerRoutes(fastify, opts) {
 
                     if (!user && vkId && firstName && lastName) {
                         user = await UserModel.create({
-                            _id: mongoose.Types.ObjectId(vkId),
+                            uid: mongoose.Types.ObjectId(vkId),
                             vkId,
                             tokenExpiresIn,
                             firstName,
