@@ -8,7 +8,7 @@ module.exports = async function (fastify, opts) {
 async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'PUT',
-        url: '/objects/object',
+        url: '/objects/:object',
         beforeHandler: fastify.auth([fastify.verifyVkAuth]),
         handler: async function (request, reply) {
             reply.type('application/json').code(200);
