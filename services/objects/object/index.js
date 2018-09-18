@@ -15,7 +15,7 @@ async function registerRoutes(fastify, opts) {
     });
 
     fastify.route({
-        method: 'PATCH',
+        method: 'PUT',
         url: '/objects/:object',
         beforeHandler: fastify.auth([fastify.verifyVkAuth]),
         handler: updateObject
