@@ -7,11 +7,9 @@ let ObjectSchema = new Schema({
     coordinates: {type: Array, required: true},
 
     title: {type: String, required: false},
-    description: {type: String, required: false},
-    address: {
-        street: {type: String, required: false},
-        houseNumber: {type: String, required: false},
-    },
+    shortDescription: {type: String, required: false},
+    fullDescription: {type: String, required: false},
+    address: {type: String, required: false},
     images: {
         thumbnailUrl: {type: String, required: false}
     }
