@@ -7,11 +7,37 @@ module.exports = async function (fastify, opts) {
 
 async function registerRoutes(fastify, opts) {
     fastify.route({
+        method: 'GET',
+        url: '/dots/:dot',
+        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
+        handler: getDot
+    });
+
+    fastify.route({
         method: 'PUT',
         url: '/dots/:dot',
         beforeHandler: fastify.auth([fastify.verifyVkAuth]),
         handler: updateDot
     });
+
+    async function getDot(request, reply) {
+        let dotId = request.params.dot;
+
+        try {
+            let dot = await DotModel.findOne({ id: dotId });
+            if (dot) {
+                reply.type('application/json').code(200);
+                return dot;
+            } else {
+                reply.type('application/json').code(404);
+                return { error: `Unable to get dot: dot ${dotId} was not found`}
+            }
+        } catch (e) {
+            reply.type('application/json').code(500);
+            console.error(e);
+            return { error: `Unable to get dot`}
+        }
+    }
 
     async function updateDot(request, reply) {
         let dot = request.body;
