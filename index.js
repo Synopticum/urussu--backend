@@ -22,6 +22,8 @@ fastify
     .register(require('./services/authenticate'), { prefix })
     .register(require('./services/authenticate/checkToken'), { prefix })
     .register(require('./services/user'), { prefix })
+    .register(require('./services/dots'), { prefix })
+    .register(require('./services/dots/dot'), { prefix })
     .register(require('./services/objects'), { prefix })
     .register(require('./services/objects/object'), { prefix })
     .register(require('./services/objects/coordinates/paths'), { prefix })
