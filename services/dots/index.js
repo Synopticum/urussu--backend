@@ -14,8 +14,13 @@ async function registerRoutes(fastify, opts) {
     });
 
     async function getDots(request, reply) {
-        reply.type('application/json').code(200);
-        const dots = await DotModel.find();
-        return dots;
+        try {
+            reply.type('application/json').code(200);
+            return await DotModel.find().select({ '_id': 0, '__v': 0});
+        } catch (e) {
+            reply.type('application/json').code(500);
+            console.error(e);
+            return { error: `Unable to get dots: error when finding in db`}
+        }
     }
 }
