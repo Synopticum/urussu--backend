@@ -15,19 +15,34 @@ async function registerRoutes(fastify, opts) {
 
     async function getObjects(request, reply) {
         if (request.query && request.query.include.includes('paths')) {
-            reply.type('application/json').code(200);
-            const objects = await ObjectModel.find({ type: 'path' });
-            return objects;
+            try {
+                reply.type('application/json').code(200);
+                return await ObjectModel.find({ type: 'path' });
+            } catch (e) {
+                reply.type('application/json').code(500);
+                console.error(e);
+                return { error: `Unable to get paths: error when finding in db`}
+            }
         }
 
         if (request.query && request.query.include.includes('circles')) {
-            reply.type('application/json').code(200);
-            const objects = await ObjectModel.find({ type: 'circle' });
-            return objects;
+            try {
+                reply.type('application/json').code(200);
+                return await ObjectModel.find({ type: 'circle' });
+            } catch (e) {
+                reply.type('application/json').code(500);
+                console.error(e);
+                return { error: `Unable to get circles: error when finding in db`}
+            }
         }
 
-        reply.type('application/json').code(200);
-        const objects = await ObjectModel.find();
-        return objects;
+        try {
+            reply.type('application/json').code(200);
+            return await ObjectModel.find();
+        } catch (e) {
+            reply.type('application/json').code(500);
+            console.error(e);
+            return { error: `Unable to get objects: error when finding in db`}
+        }
     }
 }
