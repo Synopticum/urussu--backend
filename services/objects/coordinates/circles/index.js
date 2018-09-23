@@ -18,7 +18,7 @@ async function registerRoutes(fastify, opts) {
   });
 
   async function getCirclesCoordinates() {
-    const circles = await ObjectModel.find({ type: 'circle' }).select({ '_id': 0, 'type': 0});
+    const circles = await ObjectModel.find({ type: 'circle' });
     return circles;
   }
 }
