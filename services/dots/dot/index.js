@@ -24,7 +24,7 @@ async function registerRoutes(fastify, opts) {
         let dotId = request.params.dot;
 
         try {
-            let dot = await DotModel.findOne({ id: dotId });
+            let dot = await DotModel.findOne({ id: dotId }).select({ '_id': 0, '__v': 0});
             if (dot) {
                 reply.type('application/json').code(200);
                 return dot;
@@ -46,7 +46,7 @@ async function registerRoutes(fastify, opts) {
             try {
                 await DotModel.findOneAndUpdate({ id: dot.id }, dot, { upsert: true });
                 reply.type('application/json').code(200);
-                return await DotModel.findOne({ id: dot.id });
+                return await DotModel.findOne({ id: dot.id }).select({ '_id': 0, '__v': 0});
             } catch (e) {
                 reply.type('application/json').code(500);
                 console.error(e);
