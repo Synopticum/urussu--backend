@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const mongoose = require('mongoose');
 const UserModel = require('../../db/user.model');
 const uuidv4 = require('uuid/v4');
 const { VK_CLIENT_ID, VK_CLIENT_SECRET, VK_API_VERSION } = require('../../config');
@@ -34,7 +33,7 @@ async function registerRoutes(fastify, opts) {
 
                     if (!user && vkId && firstName && lastName) {
                         user = await UserModel.create({
-                            uid: mongoose.Types.ObjectId(vkId),
+                            id: uuidv4(),
                             vkId,
                             tokenExpiresIn,
                             firstName,
