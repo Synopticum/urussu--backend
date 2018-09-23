@@ -14,17 +14,20 @@ async function registerRoutes(fastify, opts) {
     });
 
     async function getObjects(request, reply) {
-        if (request.query && request.query.coordinates) {
+        if (request.query && request.query.include.includes('paths')) {
             reply.type('application/json').code(200);
-            const coordinates = JSON.parse(request.query.coordinates);
-            const object = await getObjectByCoordinates(coordinates);
-            return object;
+            const objects = await ObjectModel.find({ type: 'path' });
+            return objects;
         }
-    }
 
-    async function getObjectByCoordinates(coordinates) {
-        const object = await ObjectModel.findOne({coordinates});
-        return object;
-    }
+        if (request.query && request.query.include.includes('circles')) {
+            reply.type('application/json').code(200);
+            const objects = await ObjectModel.find({ type: 'circle' });
+            return objects;
+        }
 
+        reply.type('application/json').code(200);
+        const objects = await ObjectModel.find();
+        return objects;
+    }
 }

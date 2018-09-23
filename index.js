@@ -26,8 +26,6 @@ fastify
     .register(require('./services/dots/dot'), { prefix })
     .register(require('./services/objects'), { prefix })
     .register(require('./services/objects/object'), { prefix })
-    .register(require('./services/objects/coordinates/paths'), { prefix })
-    .register(require('./services/objects/coordinates/circles'), { prefix })
     .register(require('./services/news'), { prefix })
     .register(require('./services/news/weather'), { prefix })
     .listen(config.PORT, config.URI, function (err) {
