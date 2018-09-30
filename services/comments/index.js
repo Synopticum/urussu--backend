@@ -14,9 +14,11 @@ async function registerRoutes(fastify, opts) {
     });
 
     async function getComments(request, reply) {
+        let originId = request.params.id;
+
         try {
             reply.type('application/json').code(200);
-            return await CommentModel.find().select({ '_id': 0, '__v': 0});
+            return await CommentModel.find({ originId }).select({ '_id': 0, '__v': 0});
         } catch (e) {
             reply.type('application/json').code(500);
             console.error(e);
