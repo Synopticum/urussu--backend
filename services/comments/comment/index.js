@@ -13,6 +13,13 @@ async function registerRoutes(fastify, opts) {
         handler: putComment
     });
 
+    fastify.route({
+        method: 'DELETE',
+        url: '/:type/:id/comments/:commentId',
+        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
+        handler: deleteComment
+    });
+
     async function putComment(request, reply) {
         let comment = request.body;
 
@@ -29,6 +36,20 @@ async function registerRoutes(fastify, opts) {
         } else {
             reply.type('application/json').code(400);
             return { error: `Unable to update comment: comment model hasn't been provided`}
+        }
+    }
+
+    async function deleteComment(request, reply) {
+        let commentId = request.params.commentId;
+
+        try {
+            await CommentModel.remove({ id: commentId });
+            reply.type('application/json').code(200);
+            return {};
+        } catch (e) {
+            reply.type('application/json').code(500);
+            console.error(e);
+            return { error: `Unable to delete comment: error when saving`}
         }
     }
 }
