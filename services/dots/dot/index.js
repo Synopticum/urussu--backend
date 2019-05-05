@@ -20,6 +20,14 @@ async function registerRoutes(fastify, opts) {
         handler: updateDot
     });
 
+
+    fastify.route({
+        method: 'DELETE',
+        url: '/dots/:dot',
+        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
+        handler: deleteDot
+    });
+
     async function getDot(request, reply) {
         let dotId = request.params.dot;
 
@@ -55,6 +63,20 @@ async function registerRoutes(fastify, opts) {
         } else {
             reply.type('application/json').code(400);
             return { error: `Unable to update dot: dot model hasn't been provided`}
+        }
+    }
+
+    async function deleteDot(request, reply) {
+        let dotId = request.params.dot;
+
+        try {
+            await DotModel.remove({ id: dotId });
+            reply.type('application/json').code(200);
+            return {};
+        } catch (e) {
+            reply.type('application/json').code(500);
+            console.error(e);
+            return { error: `Unable to delete a dot: error when deleting`}
         }
     }
 }
