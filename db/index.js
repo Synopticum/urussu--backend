@@ -15,6 +15,7 @@ let db = mongoose.connection;
 
 db.on('error', err => {
     console.error('A db error occurred', err.message);
+    throw Error(err);
 });
 
 module.exports = db;
