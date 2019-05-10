@@ -10,7 +10,6 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'GET',
         url: '/dots/:dot',
-        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
         handler: getDot
     });
 

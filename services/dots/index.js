@@ -3,13 +3,12 @@ const DotModel = require('../../db/dot.model');
 module.exports = async function (fastify, opts) {
     fastify
         .register(registerRoutes);
-}
+};
 
 async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'GET',
         url: '/dots',
-        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
         handler: getDots
     });
 

@@ -10,7 +10,6 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'GET',
         url: '/objects/:object',
-        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
         handler: getObject
     });
 

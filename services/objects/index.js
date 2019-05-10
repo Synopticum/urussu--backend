@@ -9,7 +9,6 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'GET',
         url: '/objects',
-        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
         handler: getObjects
     });
 

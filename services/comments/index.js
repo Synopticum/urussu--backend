@@ -9,7 +9,6 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'GET',
         url: '/:type/:id/comments',
-        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
         handler: getComments
     });
 
