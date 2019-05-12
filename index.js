@@ -19,9 +19,9 @@ const multer = require('fastify-multer');
 
 fastify
     .use(require('cors')())
-    .register(require('fastify-auth'))
     .register(multer.contentParser)
     .decorate('verifyVkAuth', require('./services/authenticate/verifyVkAuth'))
+    .register(require('fastify-auth'))
     .register(require('./services/authenticate'), { prefix })
     .register(require('./services/authenticate/checkToken'), { prefix })
     .register(require('./services/user'), { prefix })

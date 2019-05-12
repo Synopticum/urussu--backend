@@ -1,4 +1,6 @@
 const { s3 } = require('../../config/aws');
+const uuidv4 = require('uuid/v4');
+const DotModel = require('../../db/dot.model');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -12,22 +14,25 @@ async function registerRoutes(fastify, opts) {
 
     fastify.route({
         method: 'PUT',
-        url: '/upload',
-        beforeHandler: [
+        url: '/:type/:id/photos',
+        preHandler: [
             upload.single('photo'),
-            fastify.auth([fastify.verifyVkAuth]),
+            fastify.auth([fastify.verifyVkAuth])
         ],
         handler: async function (request, reply) {
-            // request.file is the `avatar` file
-            // request.body will hold the text fields, if there were any
             try {
-                const photo = request.file.buffer;
-                const key = request.body.key;
+                const { type, id } = request.params;
+                const extension = request.file.originalname.split('.').pop().toLowerCase();
+                const name = `${uuidv4()}.${extension}`;
 
-                await _uploadPhoto(photo, key);
-                reply.code(200).send('SUCCESS');
+                const file = request.file.buffer;
+                const key = `photos/${type}s/${id}/${name}`;
+
+                await _uploadPhoto(file, key);
+                // await DotModel.findByIdAndUpdate();
+                reply.code(200).send({ key });
             } catch (e) {
-                reply.code(400).send('FAILURE');
+                reply.code(400).send({ error: e.message });
             }
         }
     });
