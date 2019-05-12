@@ -25,6 +25,10 @@ const config = {
 
     get VK_API_VERSION() {
         return getValueFor('apiVersion');
+    },
+
+    get IDENTITY_POOL_ID() {
+        return getValueFor('identityPoolId');
     }
 };
 
@@ -45,13 +49,14 @@ if (!config.PORT || !config.URI || !config.VK_SERVICE_KEY || !config.VK_CLIENT_I
     throw new Error(`
         Some required params haven't been provided:
         
-        \x1b[37m Environment:--------${config.ENV ? `${config.ENV} ${checkMark}` : xMark}
-        \x1b[37m Port:---------------${config.PORT ? `${config.PORT} ${checkMark}` : xMark}
-        \x1b[37m Server URI:---------${config.URI ? `${config.URI} ${checkMark}` : xMark}
-        \x1b[37m VK Service Key:-----${config.VK_SERVICE_KEY ? `${config.VK_SERVICE_KEY} ${checkMark}` : xMark}
-        \x1b[37m VK Client ID:-------${config.VK_CLIENT_ID ? `${config.VK_CLIENT_ID} ${checkMark}` : xMark}
-        \x1b[37m VK Client Secret:---${config.VK_CLIENT_SECRET ? `${config.VK_CLIENT_SECRET} ${checkMark}` : xMark}
-        \x1b[37m VK API Version:-----${config.VK_API_VERSION ? `${config.VK_API_VERSION} ${checkMark}` : xMark}
+        \x1b[37m Environment:-------------------${config.ENV ? `${config.ENV} ${checkMark}` : xMark}
+        \x1b[37m Port:--------------------------${config.PORT ? `${config.PORT} ${checkMark}` : xMark}
+        \x1b[37m Server URI:--------------------${config.URI ? `${config.URI} ${checkMark}` : xMark}
+        \x1b[37m VK Service Key:----------------${config.VK_SERVICE_KEY ? `${config.VK_SERVICE_KEY} ${checkMark}` : xMark}
+        \x1b[37m VK Client ID:------------------${config.VK_CLIENT_ID ? `${config.VK_CLIENT_ID} ${checkMark}` : xMark}
+        \x1b[37m VK Client Secret:--------------${config.VK_CLIENT_SECRET ? `${config.VK_CLIENT_SECRET} ${checkMark}` : xMark}
+        \x1b[37m VK API Version:----------------${config.VK_API_VERSION ? `${config.VK_API_VERSION} ${checkMark}` : xMark}
+        \x1b[37m AWS Cognite Identity Pool ID:--${config.IDENTITY_POOL_ID ? `${config.IDENTITY_POOL_ID} ${checkMark}` : xMark}
         \x1b[37m`);
 }
 
