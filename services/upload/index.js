@@ -25,8 +25,9 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'POST',
         url: '/:type/:id/photos',
-        preHandler: [fastify.auth([fastify.verifyVkAuth])],
-        handler: deletePhoto
+        handler: async function (request, reply) {
+            await verifyVkAuth(request, reply, deletePhoto);
+        }
     });
 }
 
