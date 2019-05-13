@@ -1,6 +1,7 @@
 const { s3 } = require('../../config/aws');
 const uuidv4 = require('uuid/v4');
 const UserModel = require('../../db/user.model');
+const DotModel = require('../../db/dot.model');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -49,7 +50,8 @@ async function uploadPhoto(request, reply) {
         const key = `photos/${type}s/${id}/${name}`;
 
         await _uploadPhotoToS3(file, key);
-        // await DotModel.findByIdAndUpdate();
+        await _updateDotModel(id, key);
+
         reply.code(200).send({ key });
     } catch (e) {
         reply.code(400).send({ error: e.message });
@@ -71,4 +73,11 @@ async function _uploadPhotoToS3(photo, key) {
             resolve(data);
         });
     });
-};
+}
+
+async function _updateDotModel(id, key) {
+    let dot = await DotModel.findOne({ id });
+    let images = dot._doc.images;
+
+    await DotModel.findOneAndUpdate({ id }, { images: images ? [...images, key] : [key]});
+}

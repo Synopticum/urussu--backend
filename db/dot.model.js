@@ -10,9 +10,8 @@ let DotSchema = new Schema({
     title: {type: String, required: false},
     shortDescription: {type: String, required: false},
     fullDescription: {type: String, required: false},
-    images: {
-        thumbnailUrl: {type: String, required: false}
-    }
+    thumbnail: {type: String, required: false},
+    images: { type: Array, required: false }
 }, { id: false });
 
 let DotModel = mongoose.model('Dot', DotSchema);
