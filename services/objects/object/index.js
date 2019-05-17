@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const ObjectModel = require('../../../db/object.model');
+const verifyVkAuth = require('../../authenticate/verifyVkAuth');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -16,8 +17,7 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'PUT',
         url: '/objects/:object',
-        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
-        handler: updateObject
+        handler: async (request, reply) => await verifyVkAuth(request, reply, updateObject)
     });
 
     async function getObject(request, reply) {

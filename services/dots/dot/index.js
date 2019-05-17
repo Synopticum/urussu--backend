@@ -1,5 +1,6 @@
 const DotModel = require('../../../db/dot.model');
 const CommentModel = require('../../../db/comment.model');
+const verifyVkAuth = require('../../authenticate/verifyVkAuth');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -16,16 +17,14 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'PUT',
         url: '/dots/:dot',
-        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
-        handler: updateDot
+        handler: async (request, reply) => await verifyVkAuth(request, reply, updateDot)
     });
 
 
     fastify.route({
         method: 'DELETE',
         url: '/dots/:dot',
-        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
-        handler: deleteDot
+        handler: async (request, reply) => await verifyVkAuth(request, reply, deleteDot)
     });
 
     async function getDot(request, reply) {

@@ -1,7 +1,7 @@
 const { s3 } = require('../../config/aws');
 const uuidv4 = require('uuid/v4');
-const UserModel = require('../../db/user.model');
 const DotModel = require('../../db/dot.model');
+const verifyVkAuth = require('../authenticate/verifyVkAuth');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -17,35 +17,14 @@ async function registerRoutes(fastify, opts) {
         method: 'PUT',
         url: '/:type/:id/photos',
         preHandler: [upload.single('photo')],
-        handler: async function (request, reply) {
-            await verifyVkAuth(request, reply, uploadPhoto);
-        }
+        handler: async (request, reply) => await verifyVkAuth(request, reply, uploadPhoto)
     });
 
     fastify.route({
         method: 'POST',
         url: '/:type/:id/photos',
-        handler: async function (request, reply) {
-            await verifyVkAuth(request, reply, deletePhoto);
-        }
+        handler: async (request, reply) => await verifyVkAuth(request, reply, deletePhoto)
     });
-}
-
-// TODO: Get rid of verifyVkAuth, make array of preHandler functions working together
-async function verifyVkAuth(request, reply, callback) {
-    let token = request.headers['token'];
-
-    if (token) {
-        let user = await UserModel.findOne({ token });
-
-        if (user && user.tokenExpiresIn - Date.now() > 0) {
-            return callback(request, reply);
-        }
-
-        reply.code(400).send({ error: 'Token is invalid or expired' });
-    }
-
-    reply.code(400).send({ error: 'No token provided' });
 }
 
 async function uploadPhoto(request, reply) {

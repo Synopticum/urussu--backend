@@ -1,4 +1,5 @@
 const CommentModel = require('../../../db/comment.model');
+const verifyVkAuth = require('../../authenticate/verifyVkAuth');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -9,15 +10,13 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'PUT',
         url: '/:type/:id/comments/:commentId',
-        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
-        handler: putComment
+        handler: async (request, reply) => await verifyVkAuth(request, reply, putComment)
     });
 
     fastify.route({
         method: 'DELETE',
         url: '/:type/:id/comments/:commentId',
-        beforeHandler: fastify.auth([fastify.verifyVkAuth]),
-        handler: deleteComment
+        handler: async (request, reply) => await verifyVkAuth(request, reply, deleteComment)
     });
 
     async function putComment(request, reply) {
