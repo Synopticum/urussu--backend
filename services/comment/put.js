@@ -1,5 +1,5 @@
-const CommentModel = require('../../../db/comment.model');
-const verifyVkAuth = require('../../authenticate/verifyVkAuth');
+const CommentModel = require('../../db/comment.model');
+const verifyVkAuth = require('../authenticate/verifyVkAuth');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -10,16 +10,10 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'PUT',
         url: '/:type/:id/comments/:commentId',
-        handler: async (request, reply) => await verifyVkAuth(request, reply, putComment)
+        handler: async (request, reply) => await verifyVkAuth(request, reply, put)
     });
 
-    fastify.route({
-        method: 'DELETE',
-        url: '/:type/:id/comments/:commentId',
-        handler: async (request, reply) => await verifyVkAuth(request, reply, deleteComment)
-    });
-
-    async function putComment(request, reply) {
+    async function put(request, reply) {
         let comment = request.body;
 
         if (comment) {
@@ -35,20 +29,6 @@ async function registerRoutes(fastify, opts) {
         } else {
             reply.type('application/json').code(400);
             return { error: `Unable to update comment: comment model hasn't been provided`}
-        }
-    }
-
-    async function deleteComment(request, reply) {
-        let commentId = request.params.commentId;
-
-        try {
-            await CommentModel.remove({ id: commentId });
-            reply.type('application/json').code(200);
-            return {};
-        } catch (e) {
-            reply.type('application/json').code(500);
-            console.error(e);
-            return { error: `Unable to delete comment: error when saving`}
         }
     }
 }

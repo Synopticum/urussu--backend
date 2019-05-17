@@ -9,11 +9,11 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'GET',
         url: '/user',
-        handler: getMyUser
+        handler: getDefault
     });
 }
 
-async function getMyUser(request, reply) {
+async function getDefault(request, reply) {
     let token = request.headers['token'];
     let user = await UserModel.findOne({ token }).select({ '_id': 0, '__v': 0 });
 

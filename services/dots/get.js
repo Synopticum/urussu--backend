@@ -9,10 +9,10 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'GET',
         url: '/dots',
-        handler: getDots
+        handler: get
     });
 
-    async function getDots(request, reply) {
+    async function get(request, reply) {
         try {
             reply.type('application/json').code(200);
             return await DotModel.find().select({ '_id': 0, '__v': 0});

@@ -9,10 +9,10 @@ async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'GET',
         url: '/:type/:id/comments',
-        handler: getComments
+        handler: get
     });
 
-    async function getComments(request, reply) {
+    async function get(request, reply) {
         let originId = request.params.id;
 
         try {

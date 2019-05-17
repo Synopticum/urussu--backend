@@ -3,16 +3,16 @@ const ObjectModel = require('../../db/object.model');
 module.exports = async function (fastify, opts) {
     fastify
         .register(registerRoutes);
-}
+};
 
 async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'GET',
         url: '/objects',
-        handler: getObjects
+        handler: get
     });
 
-    async function getObjects(request, reply) {
+    async function get(request, reply) {
         if (request.query && request.query.include.includes('paths')) {
             try {
                 reply.type('application/json').code(200);
