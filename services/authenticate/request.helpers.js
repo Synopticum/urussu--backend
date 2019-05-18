@@ -26,13 +26,21 @@ async function isAdmin(request) {
     let token = request.headers['token'];
     let user = await UserModel.findOne({ token });
 
-    return user && user._doc.role === 'admin';
+    return user._doc && user._doc.role === 'admin';
+}
+
+async function isAnonymous(request) {
+    let token = request.headers['token'];
+    let user = await UserModel.findOne({ token });
+
+    return !token || !user._doc || user._doc.role === 'anonymous';
 }
 
 module.exports = {
     currentUser: {
         get,
         getId,
-        isAdmin
+        isAdmin,
+        isAnonymous
     }
 };

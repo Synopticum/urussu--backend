@@ -29,7 +29,7 @@ async function registerRoutes(fastify, opts) {
             }
         } else {
             reply.type('application/json').code(400);
-            return { error: `Unable to delete comment: you have no rights to delete this comment`}
+            return { error: `Unable to delete comment: you have no rights`}
         }
     }
 }
