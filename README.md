@@ -1,2 +1,3 @@
+- `mongorestore --drop --host localhost --gzip --archive=~/Desktop/urussu.latest.gz --nsInclude 'urussu.*'`
 - `mongod --dbpath ~/Desktop/projects/urussu/db/`
-- `npm start -- --env dev --uri localhost --port 3000 --apiVersion 5.78 --serviceKey ??? --clientId ??? --clientSecret ???`
+- `npm start -- --env dev --uri localhost --port 3000 --apiVersion 5.95 --serviceKey ??? --clientId ??? --clientSecret ??? --identityPoolId ???`
