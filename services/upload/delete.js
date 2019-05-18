@@ -21,8 +21,8 @@ async function remove(request, reply) {
         const { type, id } = request.params;
         const key = request.body;
 
-        await _removePhotoFromS3(key);
-        await _removePhotoFromModel(type, id, key);
+        await removePhotoFromS3(key);
+        await removePhotoFromModel(type, id, key);
 
         reply.code(200).send({ key });
     } catch (e) {
@@ -30,7 +30,7 @@ async function remove(request, reply) {
     }
 }
 
-async function _removePhotoFromS3(key) {
+async function removePhotoFromS3(key) {
     return new Promise((resolve, reject) => {
         s3.deleteObject({
             Key: key
@@ -45,7 +45,7 @@ async function _removePhotoFromS3(key) {
     });
 }
 
-async function _removePhotoFromModel(type, id, key) {
+async function removePhotoFromModel(type, id, key) {
     let dot = await DotModel.findOne({ id });
     let images = dot._doc.images;
 
