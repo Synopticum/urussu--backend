@@ -40,7 +40,11 @@ async function canRemove(request, commentId) {
 
     if (userId) {
         let comment = await CommentModel.findOne({ id: commentId });
-        let commentAuthorId = comment._doc.authorId;
+        let commentAuthorId;
+
+        if (comment._doc) {
+            commentAuthorId = comment._doc.authorId;
+        }
 
         return commentAuthorId === userId || isAdmin;
     }

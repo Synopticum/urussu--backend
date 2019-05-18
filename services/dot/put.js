@@ -39,16 +39,7 @@ async function registerRoutes(fastify, opts) {
     }
 }
 
-async function canPut(request, dot) {
-    let userId = await currentUser.getId(request);
-    let isAdmin = await currentUser.isAdmin(request);
-
-    if (userId) {
-        let dotModel = await DotModel.findOne({ id: dot.id });
-        let dotAuthorId = dotModel._doc.authorId;
-
-        return dotAuthorId === userId || isAdmin;
-    }
-
-    return false;
+async function canPut(request) {
+    let isAnonymous = await currentUser.isAnonymous(request);
+    return !isAnonymous;
 }

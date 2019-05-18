@@ -45,7 +45,11 @@ async function canRemove(request, dotId) {
 
     if (userId) {
         let dotModel = await DotModel.findOne({ id: dotId });
-        let dotAuthorId = dotModel._doc.authorId;
+        let dotAuthorId;
+
+        if (dotModel._doc) {
+            dotAuthorId = dotModel._doc.authorId;
+        }
 
         return dotAuthorId === userId || isAdmin;
     }

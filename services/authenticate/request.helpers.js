@@ -4,8 +4,8 @@ async function get(request) {
     let token = request.headers['token'];
     let user = await UserModel.findOne({ token });
 
-    if (user) {
-        return user;
+    if (user._doc) {
+        return user._doc;
     }
 
     throw new Error('No user found');
@@ -15,7 +15,7 @@ async function getId(request) {
     let token = request.headers['token'];
     let user = await UserModel.findOne({ token });
 
-    if (user) {
+    if (user._doc) {
         return user._doc.id;
     }
 
@@ -26,7 +26,11 @@ async function isAdmin(request) {
     let token = request.headers['token'];
     let user = await UserModel.findOne({ token });
 
-    return user._doc && user._doc.role === 'admin';
+    if (user._doc) {
+        return user._doc.role === 'admin';
+    }
+
+    return false;
 }
 
 async function isAnonymous(request) {
