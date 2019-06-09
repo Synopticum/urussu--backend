@@ -11,8 +11,7 @@ let DotSchema = new Schema({
     shortDescription: {type: String, required: false},
     fullDescription: {type: String, required: false},
     thumbnail: {type: String, required: false},
-    before: { type: String, required: false },
-    after: { type: String, required: false },
+    images: { type: Object, required: false },
 
     authorId: {type: String, required: false}
 }, { id: false });
