@@ -10,19 +10,20 @@ module.exports = async function (fastify, opts) {
 
 async function registerRoutes(fastify, opts) {
     fastify.route({
-        method: 'POST',
-        url: '/:type/:id/photos',
+        method: 'DELETE',
+        url: '/:type/:id/photos/:date',
         handler: async (request, reply) => await verifyVkAuth(request, reply, remove)
     });
 }
 
 async function remove(request, reply) {
     try {
-        const { type, id } = request.params;
-        const key = request.body;
+        const { type, id, date } = request.params;
+        const dot = await DotModel.findOne({ id });
+        const key = dot._doc[date];
 
         await removePhotoFromS3(key);
-        await removePhotoFromModel(type, id, key);
+        await removePhotoFromModel(type, id, date);
 
         reply.code(200).send({ key });
     } catch (e) {
@@ -45,9 +46,6 @@ async function removePhotoFromS3(key) {
     });
 }
 
-async function removePhotoFromModel(type, id, key) {
-    let dot = await DotModel.findOne({ id });
-    let images = dot._doc.images;
-
-    await DotModel.findOneAndUpdate({ id }, { images: images ? images.filter(imageKey => imageKey !== key) : images});
+async function removePhotoFromModel(type, id, date) {
+    await DotModel.findOneAndUpdate({ id }, {[date]: undefined});
 }
