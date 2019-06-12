@@ -62,8 +62,8 @@ async function removePhotos(request, reply, dotId) {
         let dot = await DotModel.findOne({ id: dotId });
         let images = dot._doc.images;
 
-        if (Array.isArray(images)) {
-            let keys = images.map(image => { return { Key: image } });
+        if (images) {
+            let keys = Object.values(images).map(image => { return { Key: image } });
             await removePhotosFromS3(keys);
         }
     } catch (e) {
