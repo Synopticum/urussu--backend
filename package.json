@@ -1,6 +1,6 @@
 {
   "name": "urussu-backend",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "dependencies": {
     "aws-sdk": "^2.453.0",
     "cors": "^2.8.5",
