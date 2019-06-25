@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 let DotSchema = new Schema({
     id: {type: String, required: true},
+    label: {type: String, required: false},
     type: {type: String, required: true},
     layer: {type: String, required: true},
     coordinates: {type: Array, required: true},
