@@ -7,6 +7,7 @@ let UserSchema = new Schema({
     tokenExpiresIn: {type: Number},
     firstName: {type: String},
     lastName: {type: String},
+    image: {type: String},
     token: {type: String},
     role: {type: String, default: 'member'}
 }, { id: false });

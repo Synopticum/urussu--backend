@@ -22,7 +22,7 @@ async function registerRoutes(fastify, opts) {
                 if (accessToken) {
                     let tokenExpiresIn = Date.now() + expiresIn*1000;
                     let token = uuidv4();
-                    let { vkId, firstName, lastName } = await getUserInfo(accessToken);
+                    let { vkId, firstName, lastName, image } = await getUserInfo(accessToken);
                     let user = await UserModel.findOne({ vkId });
 
                     if (user) {
@@ -38,6 +38,7 @@ async function registerRoutes(fastify, opts) {
                             tokenExpiresIn,
                             firstName,
                             lastName,
+                            image,
                             token,
                             role: 'member'
                         });
@@ -75,7 +76,7 @@ async function getAccessToken(code, origin) {
 }
 
 async function getUserInfo(accessToken) {
-    let response = await fetch(`https://api.vk.com/method/users.get?access_token=${accessToken}&v=${VK_API_VERSION}`);
+    let response = await fetch(`https://api.vk.com/method/users.get?access_token=${accessToken}&v=${VK_API_VERSION}&fields=photo_100`);
     let json = await response.json();
 
     if (!json.error) {
@@ -85,7 +86,8 @@ async function getUserInfo(accessToken) {
             return {
                 vkId: userInfo.id,
                 firstName: userInfo.first_name,
-                lastName: userInfo.last_name
+                lastName: userInfo.last_name,
+                image: userInfo.photo_100
             };
         }
     }
