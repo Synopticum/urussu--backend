@@ -8,7 +8,8 @@ let CommentSchema = new Schema({
     text: {type: String, required: true},
     date: {type: String, required: false},
     author: {type: String, required: false},
-    authorId: {type: String, required: false}
+    authorId: {type: String, required: false},
+    authorVkId: {type: String, required: false}
 }, { id: false });
 
 let CommentModel = mongoose.model('Comment', CommentSchema);
