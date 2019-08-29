@@ -23,6 +23,7 @@ fastify
     .register(require('./services/authenticate'), { prefix })
     .register(require('./services/authenticate/checkToken'), { prefix })
     .register(require('./services/user/get'), { prefix })
+    .register(require('./services/user/avatar/get'), { prefix })
     .register(require('./services/dots/get'), { prefix })
     .register(require('./services/dot/get'), { prefix })
     .register(require('./services/dot/put'), { prefix })
