@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let ObjectSchema = new Schema({
-    _id: {type: Schema.ObjectId},
+    id: {type: String, required: true},
     type: {type: String, required: true},
     coordinates: {type: Array, required: true},
 
@@ -13,7 +13,7 @@ let ObjectSchema = new Schema({
     images: {
         thumbnailUrl: {type: String, required: false}
     }
-}, { _id: false });
+}, { id: false });
 
 let ObjectModel = mongoose.model('Object', ObjectSchema);
 module.exports = ObjectModel;
