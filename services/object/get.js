@@ -1,6 +1,4 @@
-const mongoose = require('mongoose');
 const ObjectModel = require('../../db/object.model');
-const verifyVkAuth = require('../authenticate/verifyVkAuth');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -18,9 +16,14 @@ async function registerRoutes(fastify, opts) {
         let objectId = request.params.object;
 
         try {
-            let object = await ObjectModel.findOne({ _id: mongoose.Types.ObjectId(objectId) });
-            reply.type('application/json').code(200);
-            return object;
+            let object = await ObjectModel.findOne({ id: objectId }).select({ '_id': 0, '__v': 0});
+            if (object) {
+                reply.type('application/json').code(200);
+                return object;
+            } else {
+                reply.type('application/json').code(404);
+                return { error: `Unable to get object: object ${objectId} was not found`}
+            }
         } catch (e) {
             reply.type('application/json').code(500);
             console.error(e);
