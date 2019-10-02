@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const Timeout = require('await-timeout');
 const UserModel = require('../../db/user.model');
 const uuidv4 = require('uuid/v4');
 const { VK_CLIENT_ID, VK_CLIENT_SECRET, VK_API_VERSION } = require('../../config');
@@ -76,7 +77,20 @@ async function getAccessToken(code, origin) {
 }
 
 async function getUserInfo(accessToken) {
-    let response = await fetch(`https://api.vk.com/method/users.get?access_token=${accessToken}&v=${VK_API_VERSION}&fields=photo_100`);
+    const timer = new Timeout();
+    let response;
+
+    try {
+        response = await Promise.race([
+            fetch(`https://api.vk.com/method/users.get?access_token=${accessToken}&v=${VK_API_VERSION}&fields=photo_100`),
+            timer.set(5000, 'VK API timeout rejection')
+        ]);
+    } catch (e) {
+        return {};
+    } finally {
+        timer.clear();
+    }
+
     let json = await response.json();
 
     if (!json.error) {

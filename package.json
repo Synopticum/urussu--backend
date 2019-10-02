@@ -2,6 +2,7 @@
   "name": "urussu-backend",
   "version": "1.0.0",
   "dependencies": {
+    "await-timeout": "^0.6.0",
     "aws-sdk": "^2.453.0",
     "cors": "^2.8.5",
     "crawler": "^1.2.0",
