@@ -16,7 +16,7 @@ async function registerRoutes(fastify, opts) {
         let dotId = request.params.dot;
 
         try {
-            let dot = await DotModel.findOne({ id: dotId }).select({ '_id': 0, '__v': 0});
+            let dot = await DotModel.findOne({ id: { '$regex': dotId, '$options': 'i' } }).select({ '_id': 0, '__v': 0});
             if (dot) {
                 reply.type('application/json').code(200);
                 return dot;

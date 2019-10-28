@@ -21,9 +21,9 @@ async function registerRoutes(fastify, opts) {
         if (await canPut(request, object)) {
             if (object) {
                 try {
-                    await ObjectModel.findOneAndUpdate({ id: object.id }, object, { upsert: true });
+                    await ObjectModel.findOneAndUpdate({ id: { '$regex': object.id, '$options': 'i' } }, object, { upsert: true });
                     reply.type('application/json').code(200);
-                    return await ObjectModel.findOne({ id: object.id }).select({ '_id': 0, '__v': 0});
+                    return await ObjectModel.findOne({ id: { '$regex': object.id, '$options': 'i' } }).select({ '_id': 0, '__v': 0});
                 } catch (e) {
                     reply.type('application/json').code(500);
                     console.error(e);

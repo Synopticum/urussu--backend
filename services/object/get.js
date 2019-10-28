@@ -16,7 +16,7 @@ async function registerRoutes(fastify, opts) {
         let objectId = request.params.object;
 
         try {
-            let object = await ObjectModel.findOne({ id: objectId }).select({ '_id': 0, '__v': 0});
+            let object = await ObjectModel.findOne({ id: { '$regex': objectId, '$options': 'i' } }).select({ '_id': 0, '__v': 0});
             if (object) {
                 reply.type('application/json').code(200);
                 return object;

@@ -42,7 +42,7 @@ async function canRemove(request, objectId) {
     let isAdmin = await currentUser.isAdmin(request);
 
     if (userId) {
-        let objectModel = await ObjectModel.findOne({ id: objectId });
+        let objectModel = await ObjectModel.findOne({ id: { '$regex': objectId, '$options': 'i' } });
         let objectAuthorId;
 
         if (objectModel._doc) {
@@ -57,7 +57,7 @@ async function canRemove(request, objectId) {
 
 async function removeModel(request, reply, objectId) {
     try {
-        await ObjectModel.remove({ id: objectId });
+        await ObjectModel.remove({ id: { '$regex': objectId, '$options': 'i' } });
     } catch (e) {
         reply.type('application/json').code(500);
         return { error: `Unable to remove an object: error when deleting the object model`}
@@ -66,7 +66,7 @@ async function removeModel(request, reply, objectId) {
 
 async function removeComments(request, reply, objectId) {
     try {
-        await CommentModel.remove({ originId: objectId });
+        await CommentModel.remove({ originId: { '$regex': objectId, '$options': 'i' } });
     } catch (e) {
         reply.type('application/json').code(500);
         return { error: `Unable to remove an object: error when deleting the object comments`}
