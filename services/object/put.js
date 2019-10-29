@@ -15,6 +15,12 @@ async function registerRoutes(fastify, opts) {
         handler: async (request, reply) => await verifyVkAuth(request, reply, put)
     });
 
+    fastify.route({
+        method: 'PUT',
+        url: '/paths/:path',
+        handler: async (request, reply) => await verifyVkAuth(request, reply, put)
+    });
+
     async function put(request, reply) {
         let object = request.body;
 
@@ -27,15 +33,15 @@ async function registerRoutes(fastify, opts) {
                 } catch (e) {
                     reply.type('application/json').code(500);
                     console.error(e);
-                    return { error: `Unable to update object: error when saving`}
+                    return { error: `Unable to update object or path: error when saving`}
                 }
             } else {
                 reply.type('application/json').code(400);
-                return { error: `Unable to update object: object model hasn't been provided`}
+                return { error: `Unable to update object or path: model was not provided`}
             }
         } else {
             reply.type('application/json').code(400);
-            return { error: `Unable to update object: you have no rights`}
+            return { error: `Unable to update object or path: you have no rights`}
         }
     }
 }

@@ -15,8 +15,14 @@ async function registerRoutes(fastify, opts) {
         handler: async (request, reply) => await verifyVkAuth(request, reply, remove)
     });
 
+    fastify.route({
+        method: 'DELETE',
+        url: '/paths/:path',
+        handler: async (request, reply) => await verifyVkAuth(request, reply, remove)
+    });
+
     async function remove(request, reply) {
-        let objectId = request.params.object;
+        let objectId = request.params.object || request.params.path;
 
         if (await canRemove(request, objectId)) {
             try {
@@ -28,11 +34,11 @@ async function registerRoutes(fastify, opts) {
             } catch (e) {
                 reply.type('application/json').code(500);
                 console.error(e);
-                return { error: `Unable to delete an object: unknown error when deleting`}
+                return { error: `Unable to delete an object or path: unknown error when deleting`}
             }
         } else {
             reply.type('application/json').code(400);
-            return { error: `Unable to remove an object: you have no rights`}
+            return { error: `Unable to remove an object or path: you have no rights`}
         }
     }
 }

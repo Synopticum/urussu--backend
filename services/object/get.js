@@ -12,22 +12,28 @@ async function registerRoutes(fastify, opts) {
         handler: get
     });
 
+    fastify.route({
+        method: 'GET',
+        url: '/paths/:path',
+        handler: get
+    });
+
     async function get(request, reply) {
-        let objectId = request.params.object;
+        let id = request.params.object || request.params.path;
 
         try {
-            let object = await ObjectModel.findOne({ id: { '$regex': objectId, '$options': 'i' } }).select({ '_id': 0, '__v': 0});
+            let object = await ObjectModel.findOne({ id: { '$regex': id, '$options': 'i' } }).select({ '_id': 0, '__v': 0});
             if (object) {
                 reply.type('application/json').code(200);
                 return object;
             } else {
                 reply.type('application/json').code(404);
-                return { error: `Unable to get object: object ${objectId} was not found`}
+                return { error: `Unable to get object or path: object ${id} was not found`}
             }
         } catch (e) {
             reply.type('application/json').code(500);
             console.error(e);
-            return { error: `Unable to get object: error when finding in db`}
+            return { error: `Unable to get object or path: error when finding in db`}
         }
     }
 }
