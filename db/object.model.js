@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 let ObjectSchema = new Schema({
     id: {type: String, required: true},
+    instanceType: {type: String, required: true},
     type: {type: String, required: true},
     coordinates: {type: Array, required: true},
 
