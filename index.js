@@ -6,8 +6,8 @@ const config = require('./config');
 const serverConfig = config.ENV === 'prod' ? {
     http2: true,
     https: {
-        key: fs.readFileSync(path.join('/', 'home', 'ec2-user', 'secret.key')),
-        cert: fs.readFileSync(path.join('/', 'home', 'ec2-user', 'joined.crt'))
+        key: fs.readFileSync(path.join('/', 'home', 'ec2-user', 'urussu', 'certs', 'secret.key')),
+        cert: fs.readFileSync(path.join('/', 'home', 'ec2-user', 'urussu', 'certs', 'joined.crt'))
     }
 } : null;
 
