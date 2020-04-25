@@ -14,6 +14,7 @@ let DotSchema = new Schema({
     fullDescription: {type: String, required: false},
     thumbnail: {type: String, required: false},
     images: { type: Object, required: false },
+    rotationAngle: { type: Number, required: false },
 
     authorId: {type: String, required: false}
 }, { id: false });
