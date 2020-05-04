@@ -14,7 +14,7 @@ async function registerRoutes(fastify, opts) {
 
     fastify.route({
         method: 'PUT',
-        url: '/:type/:id/photos/:decade',
+        url: '/:type/:id/photos/:year',
         preHandler: [upload.single('photo')],
         handler: async (request, reply) => await verifyVkAuth(request, reply, put)
     });
@@ -22,15 +22,15 @@ async function registerRoutes(fastify, opts) {
 
 async function put(request, reply) {
     try {
-        const { type, id, decade } = request.params;
+        const { type, id, year } = request.params;
         const extension = request.file.originalname.split('.').pop().toLowerCase();
-        const name = `${decade}.${extension}`;
+        const name = `${year}.${extension}`;
 
         const file = request.file.buffer;
         const key = `photos/${type}s/${id}/${name}`;
 
         await _putPhotoToS3(file, key);
-        await _putPhotoToModel(type, id, decade, key);
+        await _putPhotoToModel(type, id, year, key);
 
         reply.code(200).send({ key });
     } catch (e) {
@@ -55,9 +55,10 @@ async function _putPhotoToS3(photo, key) {
     });
 }
 
-async function _putPhotoToModel(type, id, decade, key) {
-    const dot = await DotModel.findOne({ id });
+async function _putPhotoToModel(type, id, year, key) {
+    const query = { id: { '$regex': id, '$options': 'i' } };
+    const dot = await DotModel.findOne(query);
     const images = dot._doc.images || {};
 
-    await DotModel.findOneAndUpdate({ id }, { images: { ...images, [decade]: key } });
+    await DotModel.findOneAndUpdate(query, { images: { ...images, [year]: key } });
 }
