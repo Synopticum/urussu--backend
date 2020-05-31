@@ -6,6 +6,7 @@ let ObjectSchema = new Schema({
     instanceType: {type: String, required: true},
     type: {type: String, required: true},
     coordinates: {type: Array, required: true},
+    radius: { type: Number, required: false },
 
     title: {type: String, required: false},
     shortDescription: {type: String, required: false},
