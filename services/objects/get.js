@@ -18,7 +18,6 @@ async function registerRoutes(fastify, opts) {
 
         if (hasFilters && request.query.include.includes('objects')) type = 'object';
         if (hasFilters && request.query.include.includes('circles')) type = 'circle';
-        if (hasFilters && request.query.include.includes('paths')) type = 'path';
 
         if (hasFilters && request.query.include.includes(`${type}s`)) {
             try {

@@ -1,6 +1,6 @@
 const { s3 } = require('../../config/aws');
 const verifyVkAuth = require('../authenticate/verifyVkAuth');
-const helpers = require('./helpers');
+const helpers = require('../helpers');
 
 module.exports = async function (fastify, opts) {
     fastify

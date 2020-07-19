@@ -1,4 +1,4 @@
-const ObjectModel = require('../../db/object.model');
+const helpers = require('../helpers');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -19,21 +19,23 @@ async function registerRoutes(fastify, opts) {
     });
 
     async function get(request, reply) {
-        let id = request.params.object || request.params.path;
+        const type = helpers.getType(request.params);
+        const id = request.params[type];
+        const Model = helpers.getModel(type);
 
         try {
-            let object = await ObjectModel.findOne({ id: { '$regex': id, '$options': 'i' } }).select({ '_id': 0, '__v': 0});
-            if (object) {
+            let model = await Model.findOne({id: {'$regex': id, '$options': 'i'}}).select({'_id': 0, '__v': 0});
+            if (model) {
                 reply.type('application/json').code(200);
-                return object;
+                return model;
             } else {
                 reply.type('application/json').code(404);
-                return { error: `Unable to get object or path: object ${id} was not found`}
+                return {error: `Unable to get ${type}: ${type} ${id} was not found`};
             }
         } catch (e) {
             reply.type('application/json').code(500);
             console.error(e);
-            return { error: `Unable to get object or path: error when finding in db`}
+            return {error: `Unable to get ${type}: error when finding in db`};
         }
     }
 }

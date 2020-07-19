@@ -32,6 +32,7 @@ fastify
     .register(require('./services/object/get'), { prefix })
     .register(require('./services/object/put'), { prefix })
     .register(require('./services/object/delete'), { prefix })
+    .register(require('./services/paths/get'), { prefix })
     .register(require('./services/comments/get'), { prefix })
     .register(require('./services/comment/put'), { prefix })
     .register(require('./services/comment/delete'), { prefix })

@@ -1,4 +1,4 @@
-const helpers = require('./helpers');
+const helpers = require('../helpers');
 const { s3 } = require('../../config/aws');
 const verifyVkAuth = require('../authenticate/verifyVkAuth');
 

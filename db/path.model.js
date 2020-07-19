@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let ObjectSchema = new Schema({
+let PathSchema = new Schema({
     id: {type: String, required: true},
     instanceType: {type: String, required: true},
     type: {type: String, required: true},
@@ -13,13 +13,7 @@ let ObjectSchema = new Schema({
 
     thumbnail: {type: String, required: false},
     images: {type: Object, required: false},
-
-    street: {type: String, required: false},
-    house: {type: String, required: false},
-
-    // circle
-    radius: {type: Number, required: false},
 }, {id: false});
 
-let ObjectModel = mongoose.model('Object', ObjectSchema);
-module.exports = ObjectModel;
+let PathModel = mongoose.model('Path', PathSchema);
+module.exports = PathModel;

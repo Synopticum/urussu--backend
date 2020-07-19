@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const ObjectModel = require('../../db/object.model');
+const PathModel = require('../../db/path.model');
 const verifyVkAuth = require('../authenticate/verifyVkAuth');
 const { currentUser } = require('../authenticate/request.helpers');
 
@@ -22,26 +23,27 @@ async function registerRoutes(fastify, opts) {
     });
 
     async function put(request, reply) {
-        let object = request.body;
+        let model = request.body;
+        const Model = model.instanceType === 'object' ? ObjectModel : PathModel;
 
-        if (await canPut(request, object)) {
-            if (object) {
+        if (await canPut(request, model)) {
+            if (model) {
                 try {
-                    await ObjectModel.findOneAndUpdate({ id: { '$regex': object.id, '$options': 'i' } }, object, { upsert: true });
+                    await Model.findOneAndUpdate({ id: { '$regex': model.id, '$options': 'i' } }, model, { upsert: true });
                     reply.type('application/json').code(200);
-                    return await ObjectModel.findOne({ id: { '$regex': object.id, '$options': 'i' } }).select({ '_id': 0, '__v': 0});
+                    return await Model.findOne({ id: { '$regex': model.id, '$options': 'i' } }).select({ '_id': 0, '__v': 0});
                 } catch (e) {
                     reply.type('application/json').code(500);
                     console.error(e);
-                    return { error: `Unable to update object or path: error when saving`}
+                    return { error: `Unable to update ${model.instanceType}: error when saving`}
                 }
             } else {
                 reply.type('application/json').code(400);
-                return { error: `Unable to update object or path: model was not provided`}
+                return { error: `Unable to update ${model.instanceType}: model was not provided`}
             }
         } else {
             reply.type('application/json').code(400);
-            return { error: `Unable to update object or path: you have no rights`}
+            return { error: `Unable to update ${model.instanceType}: you have no rights`}
         }
     }
 }

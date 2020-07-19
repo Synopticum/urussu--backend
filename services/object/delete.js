@@ -1,5 +1,6 @@
 const ObjectModel = require('../../db/object.model');
 const CommentModel = require('../../db/comment.model');
+const helpers = require('../helpers');
 const verifyVkAuth = require('../authenticate/verifyVkAuth');
 const { currentUser } = require('../authenticate/request.helpers');
 
@@ -22,12 +23,14 @@ async function registerRoutes(fastify, opts) {
     });
 
     async function remove(request, reply) {
-        let objectId = request.params.object || request.params.path;
+        const type = helpers.getType(request.params);
+        const id = request.params[type];
+        const Model = helpers.getModel(type);
 
-        if (await canRemove(request, objectId)) {
+        if (await canRemove(request, id, Model)) {
             try {
-                await removeModel(request, reply, objectId);
-                await removeComments(request, reply, objectId);
+                await removeModel(request, reply, id, Model);
+                await removeComments(request, reply, id);
 
                 reply.type('application/json').code(200);
                 return {};
@@ -43,36 +46,36 @@ async function registerRoutes(fastify, opts) {
     }
 }
 
-async function canRemove(request, objectId) {
+async function canRemove(request, id, Model) {
     let userId = await currentUser.getId(request);
     let isAdmin = await currentUser.isAdmin(request);
 
     if (userId) {
-        let objectModel = await ObjectModel.findOne({ id: { '$regex': objectId, '$options': 'i' } });
-        let objectAuthorId;
+        let model = await Model.findOne({ id: { '$regex': id, '$options': 'i' } });
+        let modelAuthorId;
 
-        if (objectModel._doc) {
-            objectAuthorId = objectModel._doc.authorId;
+        if (model._doc) {
+            modelAuthorId = model._doc.authorId;
         }
 
-        return objectAuthorId === userId || isAdmin;
+        return modelAuthorId === userId || isAdmin;
     }
 
     return false;
 }
 
-async function removeModel(request, reply, objectId) {
+async function removeModel(request, reply, id, Model) {
     try {
-        await ObjectModel.remove({ id: { '$regex': objectId, '$options': 'i' } });
+        await Model.remove({ id: { '$regex': id, '$options': 'i' } });
     } catch (e) {
         reply.type('application/json').code(500);
         return { error: `Unable to remove an object: error when deleting the object model`}
     }
 }
 
-async function removeComments(request, reply, objectId) {
+async function removeComments(request, reply, id) {
     try {
-        await CommentModel.remove({ originId: { '$regex': objectId, '$options': 'i' } });
+        await CommentModel.remove({ originId: { '$regex': id, '$options': 'i' } });
     } catch (e) {
         reply.type('application/json').code(500);
         return { error: `Unable to remove an object: error when deleting the object comments`}
