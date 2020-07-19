@@ -11,11 +11,11 @@ let DotSchema = new Schema({
     shortDescription: {type: String, required: false},
     fullDescription: {type: String, required: false},
     thumbnail: {type: String, required: false},
-    images: { type: Object, required: false },
-    rotationAngle: { type: Number, required: false },
+    images: {type: Object, required: false},
+    rotationAngle: {type: Number, required: false},
 
     authorId: {type: String, required: false}
-}, { id: false });
+}, {id: false});
 
 let DotModel = mongoose.model('Dot', DotSchema);
 module.exports = DotModel;

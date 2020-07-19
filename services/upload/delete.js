@@ -1,7 +1,6 @@
 const { s3 } = require('../../config/aws');
-const uuidv4 = require('uuid/v4');
-const DotModel = require('../../db/dot.model');
 const verifyVkAuth = require('../authenticate/verifyVkAuth');
+const helpers = require('./helpers');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -19,8 +18,10 @@ async function registerRoutes(fastify, opts) {
 async function remove(request, reply) {
     try {
         const { type, id, year } = request.params;
-        const dot = await DotModel.findOne({ id });
-        const key = dot._doc.images[year];
+        const query = { id: { '$regex': id, '$options': 'i' } };
+        const Model = helpers.getModel(type);
+        const model = await Model.findOne(query);
+        const key = model._doc.images[year];
 
         await removePhotoFromS3(key);
         await removePhotoFromModel(type, id, year);
@@ -47,8 +48,10 @@ async function removePhotoFromS3(key) {
 }
 
 async function removePhotoFromModel(type, id, year) {
-    const dot = await DotModel.findOne({ id });
-    delete dot._doc.images[year];
+    const query = { id: { '$regex': id, '$options': 'i' } };
+    const Model = helpers.getModel(type);
+    const model = await Model.findOne(query);
+    delete model._doc.images[year];
 
-    await DotModel.findOneAndUpdate({ id }, { images: dot._doc.images });
+    await Model.findOneAndUpdate(query, { images: model._doc.images });
 }

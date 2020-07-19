@@ -12,18 +12,16 @@ let ObjectSchema = new Schema({
     shortDescription: {type: String, required: false},
     fullDescription: {type: String, required: false},
 
-    // dot
-    images: {
-        thumbnailUrl: {type: String, required: false}
-    },
+    thumbnail: {type: String, required: false},
+    images: {type: Object, required: false},
 
     // object
     street: {type: String, required: false},
     house: {type: String, required: false},
 
     // circle
-    radius: { type: Number, required: false },
-}, { id: false });
+    radius: {type: Number, required: false},
+}, {id: false});
 
 let ObjectModel = mongoose.model('Object', ObjectSchema);
 module.exports = ObjectModel;

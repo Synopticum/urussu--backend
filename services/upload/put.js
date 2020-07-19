@@ -1,5 +1,5 @@
+const helpers = require('./helpers');
 const { s3 } = require('../../config/aws');
-const DotModel = require('../../db/dot.model');
 const verifyVkAuth = require('../authenticate/verifyVkAuth');
 
 module.exports = async function (fastify, opts) {
@@ -57,8 +57,9 @@ async function _putPhotoToS3(photo, key) {
 
 async function _putPhotoToModel(type, id, year, key) {
     const query = { id: { '$regex': id, '$options': 'i' } };
-    const dot = await DotModel.findOne(query);
-    const images = dot._doc.images || {};
+    const Model = helpers.getModel(type);
+    const model = await Model.findOne(query);
+    const images = model._doc.images || {};
 
-    await DotModel.findOneAndUpdate(query, { images: { ...images, [year]: key } });
+    await Model.findOneAndUpdate(query, { images: { ...images, [year]: key } });
 }
