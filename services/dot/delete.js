@@ -1,8 +1,8 @@
-const { s3 } = require('../../config/aws');
 const DotModel = require('../../db/dot.model');
 const CommentModel = require('../../db/comment.model');
 const verifyVkAuth = require('../authenticate/verifyVkAuth');
 const { currentUser } = require('../authenticate/request.helpers');
+const helpers = require('../helpers');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -59,35 +59,17 @@ async function canRemove(request, dotId) {
 
 async function removePhotos(request, reply, dotId) {
     try {
-        let dot = await DotModel.findOne({ id: { '$regex': dotId, '$options': 'i' } });
-        let images = dot._doc.images;
+        const dot = await DotModel.findOne({ id: { '$regex': dotId, '$options': 'i' } });
+        const images = dot._doc.images;
 
         if (images) {
-            let keys = Object.values(images).map(image => { return { Key: image } });
-            await removePhotosFromS3(keys);
+            let keys = Object.values(images).map(image => ({ Key: image }));
+            await helpers.removePhotosFromS3(keys);
         }
     } catch (e) {
         reply.type('application/json').code(500);
         return { error: `Unable to remove a dot: error when deleting dot photos`}
     }
-}
-
-async function removePhotosFromS3(keys) {
-    return new Promise((resolve, reject) => {
-        s3.deleteObjects({
-            Delete: {
-                Objects: keys,
-                Quiet: false
-            }
-        }, (err, data) => {
-            if (err) {
-                console.error('There was an error deleting your photo: ', err.message);
-                reject(err.message);
-            }
-
-            resolve(data);
-        });
-    });
 }
 
 async function removeModel(request, reply, dotId) {

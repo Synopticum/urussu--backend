@@ -1,4 +1,3 @@
-const ObjectModel = require('../../db/object.model');
 const CommentModel = require('../../db/comment.model');
 const helpers = require('../helpers');
 const verifyVkAuth = require('../authenticate/verifyVkAuth');
@@ -29,6 +28,7 @@ async function registerRoutes(fastify, opts) {
 
         if (await canRemove(request, id, Model)) {
             try {
+                await removePhotos(request, reply, id, Model);
                 await removeModel(request, reply, id, Model);
                 await removeComments(request, reply, id);
 
@@ -79,5 +79,16 @@ async function removeComments(request, reply, id) {
     } catch (e) {
         reply.type('application/json').code(500);
         return { error: `Unable to remove an object: error when deleting the object comments`}
+    }
+}
+
+async function removePhotos(request, reply, id, Model) {
+    const query = { id: { '$regex': id, '$options': 'i' } };
+    const model = await Model.findOne(query);
+    const images = model._doc.images;
+
+    if (images) {
+        const keys = Object.keys(images).map(year => ({ Key: images[year] }));
+        await helpers.removePhotosFromS3(keys);
     }
 }
