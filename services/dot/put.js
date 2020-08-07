@@ -20,7 +20,7 @@ async function registerRoutes(fastify, opts) {
         if (await canPut(request, dot)) {
             if (dot) {
                 try {
-                    await DotModel.findOneAndUpdate({ id: { '$regex': dot.id, '$options': 'i' } }, dot, { upsert: true });
+                    await DotModel.findOneAndUpdate({ id: { '$regex': dot.id, '$options': 'i' } }, dot, { upsert: true, useFindAndModify: false });
                     reply.type('application/json').code(200);
                     return await DotModel.findOne({ id: { '$regex': dot.id, '$options': 'i' } }).select({ '_id': 0, '__v': 0});
                 } catch (e) {

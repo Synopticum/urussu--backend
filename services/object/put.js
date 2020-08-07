@@ -29,7 +29,7 @@ async function registerRoutes(fastify, opts) {
         if (await canPut(request, model)) {
             if (model) {
                 try {
-                    await Model.findOneAndUpdate({ id: { '$regex': model.id, '$options': 'i' } }, model, { upsert: true });
+                    await Model.findOneAndUpdate({ id: { '$regex': model.id, '$options': 'i' } }, model, { upsert: true, useFindAndModify: false });
                     reply.type('application/json').code(200);
                     return await Model.findOne({ id: { '$regex': model.id, '$options': 'i' } }).select({ '_id': 0, '__v': 0});
                 } catch (e) {

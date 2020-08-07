@@ -53,5 +53,5 @@ async function removePhotoFromModel(type, id, year) {
     const model = await Model.findOne(query);
     delete model._doc.images[year];
 
-    await Model.findOneAndUpdate(query, { images: model._doc.images });
+    await Model.findOneAndUpdate(query, { images: model._doc.images }, { useFindAndModify: false });
 }

@@ -19,7 +19,7 @@ async function registerRoutes(fastify, opts) {
 
         if (await canRemove(request, commentId)) {
             try {
-                await CommentModel.remove({ id: commentId });
+                await CommentModel.deleteOne({ id: commentId });
                 reply.type('application/json').code(200);
                 return {};
             } catch (e) {

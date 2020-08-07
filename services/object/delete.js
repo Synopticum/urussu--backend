@@ -66,7 +66,7 @@ async function canRemove(request, id, Model) {
 
 async function removeModel(request, reply, id, Model) {
     try {
-        await Model.remove({ id: { '$regex': id, '$options': 'i' } });
+        await Model.deleteOne({ id: { '$regex': id, '$options': 'i' } });
     } catch (e) {
         reply.type('application/json').code(500);
         return { error: `Unable to remove an object: error when deleting the object model`}
@@ -75,7 +75,7 @@ async function removeModel(request, reply, id, Model) {
 
 async function removeComments(request, reply, id) {
     try {
-        await CommentModel.remove({ originId: { '$regex': id, '$options': 'i' } });
+        await CommentModel.deleteOne({ originId: { '$regex': id, '$options': 'i' } });
     } catch (e) {
         reply.type('application/json').code(500);
         return { error: `Unable to remove an object: error when deleting the object comments`}

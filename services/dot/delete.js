@@ -74,7 +74,7 @@ async function removePhotos(request, reply, dotId) {
 
 async function removeModel(request, reply, dotId) {
     try {
-        await DotModel.remove({ id: { '$regex': dotId, '$options': 'i' } });
+        await DotModel.deleteOne({ id: { '$regex': dotId, '$options': 'i' } });
     } catch (e) {
         reply.type('application/json').code(500);
         return { error: `Unable to remove a dot: error when deleting a dot model`}
@@ -83,7 +83,7 @@ async function removeModel(request, reply, dotId) {
 
 async function removeComments(request, reply, dotId) {
     try {
-        await CommentModel.remove({ originId: { '$regex': dotId, '$options': 'i' } });
+        await CommentModel.deleteOne({ originId: { '$regex': dotId, '$options': 'i' } });
     } catch (e) {
         reply.type('application/json').code(500);
         return { error: `Unable to remove a dot: error when deleting dot comments`}

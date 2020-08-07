@@ -61,5 +61,5 @@ async function _putPhotoToModel(type, id, year, key) {
     const model = await Model.findOne(query);
     const images = model._doc.images || {};
 
-    await Model.findOneAndUpdate(query, { images: { ...images, [year]: key } });
+    await Model.findOneAndUpdate(query, { images: { ...images, [year]: key } }, { useFindAndModify: false });
 }

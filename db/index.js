@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 const dbPath = 'mongodb://localhost:27017/urussu';
 
-mongoose.connect(dbPath, null, (err) => {
+const options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+};
+
+mongoose.connect(dbPath, options, (err) => {
     if(err) {
         console.error(`Unable to connect ${dbPath}`);
         console.error(err.message);
