@@ -38,6 +38,7 @@ fastify
     .register(require('./services/comment/delete'), { prefix })
     .register(require('./services/upload/put'), { prefix, multer })
     .register(require('./services/upload/delete'), { prefix, multer })
+    .register(require('./services/search/get'), { prefix })
     .listen(config.PORT, config.URI, function (err) {
         if (err) throw err;
         console.log(`server listening on ${fastify.server.address().port}`)
