@@ -12,5 +12,5 @@ let CommentSchema = new Schema({
     authorVkId: {type: String, required: false}
 }, { id: false });
 
-let CommentModel = mongoose.model('Comment', CommentSchema);
+let CommentModel = mongoose.model('Comment', CommentSchema, 'comments');
 module.exports = CommentModel;

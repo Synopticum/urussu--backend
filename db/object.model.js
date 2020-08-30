@@ -21,5 +21,5 @@ let ObjectSchema = new Schema({
     radius: {type: Number, required: false},
 }, {id: false});
 
-let ObjectModel = mongoose.model('Object', ObjectSchema);
+let ObjectModel = mongoose.model('Object', ObjectSchema, 'objects');
 module.exports = ObjectModel;

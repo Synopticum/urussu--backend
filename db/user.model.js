@@ -12,5 +12,5 @@ let UserSchema = new Schema({
     role: {type: String, default: 'member'}
 }, { id: false });
 
-let UserModel = mongoose.model('User', UserSchema);
+let UserModel = mongoose.model('User', UserSchema, 'users');
 module.exports = UserModel;

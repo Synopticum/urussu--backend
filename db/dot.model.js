@@ -17,5 +17,5 @@ let DotSchema = new Schema({
     authorId: {type: String, required: false}
 }, {id: false});
 
-let DotModel = mongoose.model('Dot', DotSchema);
+let DotModel = mongoose.model('Dot', DotSchema, 'dots');
 module.exports = DotModel;

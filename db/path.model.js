@@ -15,5 +15,5 @@ let PathSchema = new Schema({
     images: {type: Object, required: false},
 }, {id: false});
 
-let PathModel = mongoose.model('Path', PathSchema);
+let PathModel = mongoose.model('Path', PathSchema, 'paths');
 module.exports = PathModel;
