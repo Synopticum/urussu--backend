@@ -1,4 +1,4 @@
-const ItemModel = require('../../../../db/stats/weather/hottestSummer.model');
+const ItemModel = require('../../../../db/stats/weather/summer.model');
 
 module.exports = async function (fastify, opts) {
     fastify
@@ -8,7 +8,7 @@ module.exports = async function (fastify, opts) {
 async function registerRoutes(fastify, opts) {
     fastify.route({
         method: 'GET',
-        url: '/stats/weather/hottest-summer',
+        url: '/stats/weather/summer',
         handler: get
     });
 

@@ -6,5 +6,5 @@ let ItemSchema = new Schema({
     dt_iso: {type: String, required: true},
 });
 
-let ItemModel = mongoose.model('Item', ItemSchema, 'weather_hottest_summer');
+let ItemModel = mongoose.model('Item', ItemSchema, 'weather-summer');
 module.exports = ItemModel;
