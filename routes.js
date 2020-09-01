@@ -26,6 +26,8 @@ const routes = [
     { value: '/stats/addresses/get' },
     { value: '/stats/population/get' },
     { value: '/stats/weather/summer/get' },
+    { value: '/stats/weather/temperature/hottest/get' },
+    { value: '/stats/weather/temperature/lowest/get' },
 ];
 
 module.exports = attachRoutes = (fastify) => {
